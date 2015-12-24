@@ -1,0 +1,17 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\cupdate_file.o
+./debug\cselect_simulation_engine.o
+./debug\citc_evc_message_handler.o
+./debug\qcustomplot.o
+./debug\evc_design.o
+./debug\cglwidget.o
+./debug\ccheck_software_upgrade.o
+./debug\qrc_resource.o
+./debug\moc_mainwindow.o
+./debug\moc_cselect_simulation_engine.o
+./debug\moc_qcustomplot.o
+./debug\moc_cglwidget.o
+./debug\moc_ccheck_software_upgrade.o
+);
