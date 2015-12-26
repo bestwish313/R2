@@ -22,40 +22,46 @@ public:
     void InitializeMainWindowScrollBar();
     void InitializeToolbar();
     void InitializeArduinoSerialPort();
+    void InitializeUi();
     void WriteToArduino(const QString);
+    void AlignTableCell(const int);
 
 
 private slots:
 
     void on_b2_toggled(bool checked);
-
     void on_b3_toggled(bool checked);
-
     void on_b4_toggled(bool checked);
-
     void on_b5_toggled(bool checked);
-
     void on_b6_toggled(bool checked);
-
     void on_b7_toggled(bool checked);
-
     void on_b8_toggled(bool checked);
-
     void on_b9_toggled(bool checked);
-
     void on_b10_toggled(bool checked);
+    void AddScriptToTable(const int, const QString);
+    void on_radioButton_toggled(bool checked);
+    void SendGroupCommand();
+    void ClearTable();
+    void SetRowCol(const int, const int);
+    void ShowContextMenu(const QPoint&);
+    void InsertScript();
+    void DeleteScript();
 
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *arduino;
+    QString m_script;
     QString arduino_port_name;
     bool arduiono_is_available;
     static const quint16 arduino_uno_vendor_id = 9025;
     static const quint16 arduino_uno_product_id = 67;
+    static const int invalidRow =  9999999999;
+    int m_delay;
+    int m_row;
+    int m_col;
 
     bool Power;
-
     const QString W1 = "2"; const QString W1_OFF = "A";
     const QString W2 = "3"; const QString W2_OFF = "B";
     const QString W3 = "4"; const QString W3_OFF = "C";

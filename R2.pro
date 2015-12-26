@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    crecord.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    crecord.h
 
 FORMS    += mainwindow.ui
 
