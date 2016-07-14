@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "creadwritefile.h"
 
 #include <QScrollArea>
 #include <QDateTime>
 #include <QScrollBar>
 #include <QDebug>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,101 +15,22 @@ MainWindow::MainWindow(QWidget *parent) :
     m_script(""),
     m_delay(0),
     m_row(invalidRow),
-    m_col(0)
+    m_col(0),
+    timer(new QElapsedTimer)
 {
     ui->setupUi(this);
 
     InitializeMainWindowScrollBar();
     InitializeToolbar();
     InitializeUi();
-    InitializeArduinoSerialPort();
 }
 
 MainWindow::~MainWindow()
 {
+    delete timer;
     delete ui;
 }
 
-void
-MainWindow::
-AlignTableCell(int row) {
-
-    ui->tableWidget->item(row,0)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    ui->tableWidget->item(row,1)->setTextAlignment(Qt::AlignCenter);
-    ui->tableWidget->item(row,2)->setTextAlignment(Qt::AlignCenter);
-    ui->tableWidget->item(row,3)->setTextAlignment(Qt::AlignVCenter);
-}
-
-void
-MainWindow::
-InitializeMainWindowScrollBar() {
-
-    QScrollArea* scrollArea = new QScrollArea();
-    scrollArea->setWidget(ui->scrollableRegion);
-    setCentralWidget(scrollArea);
-}
-
-void
-MainWindow::
-InitializeArduinoSerialPort() {
-
-    arduiono_is_available = false;
-    arduino_port_name = "";
-    arduino = new QSerialPort;
-
-    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
-
-            if (serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
-                if (serialPortInfo.vendorIdentifier() == arduino_uno_vendor_id) {
-                    if (serialPortInfo.productIdentifier() == arduino_uno_product_id) {
-                        arduino_port_name = serialPortInfo.portName();
-                        arduiono_is_available = true;
-                    }
-                }
-            }
-    }
-
-    if (arduiono_is_available) {
-        // open configure the port
-        arduino->setPortName(arduino_port_name);
-        arduino->open(QSerialPort::WriteOnly);
-        arduino->setBaudRate(QSerialPort::Baud9600);
-        arduino->setDataBits(QSerialPort::Data8);
-        arduino->setParity(QSerialPort::NoParity);
-        arduino->setStopBits(QSerialPort::OneAndHalfStop); // on windows
-        arduino->setFlowControl(QSerialPort::NoFlowControl);
-    } else {
-        // error message
-        QMessageBox::warning(this,"error","Couldn't find port");
-    }
-}
-
-void
-MainWindow::
-InitializeToolbar() {
-
-    ui->mainToolBar->addAction(ui->actionNew);
-    ui->mainToolBar->addAction(ui->actionOpen);
-    ui->mainToolBar->addAction(ui->actionSave);
-    ui->mainToolBar->addSeparator();
-    ui->mainToolBar->addAction(ui->actionReset_Script);
-}
-
-void
-MainWindow::
-InitializeUi() {
-    QHeaderView *header = ui->tableWidget->horizontalHeader();
-    header->setSectionResizeMode(QHeaderView::ResizeToContents);
-    header->setResizeContentsPrecision(QHeaderView::Stretch);    
-
-    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(SendGroupCommand()));
-    connect(ui->actionReset_Script, SIGNAL(triggered(bool)), this, SLOT(ClearTable()));
-    connect(ui->tableWidget, SIGNAL(cellPressed(int,int)), this, SLOT(SetRowCol(int,int)));
-    // RIGHT MOUSE BUTTON MENU ////////////////////////////////////
-    ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint &)),this, SLOT(ShowContextMenu(const QPoint &)));
-    //////////////////////////////////////////////////////////////////
-}
 
 void
 MainWindow::
@@ -136,8 +59,14 @@ AddScriptToTable(const int index, const QString script) {
         ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,new QTableWidgetItem(QDateTime::currentDateTime().toString()));
 
         // SCRIPT
-        if (script.length() > 0)
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,index,new QTableWidgetItem(script));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,index,new QTableWidgetItem(script));
+
+        // DELAY
+        if (ui->tableWidget->rowCount() == 1)
+            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,new QTableWidgetItem("0"));
+        else
+            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,2,new QTableWidgetItem(QString::number(timer->elapsed()/1000)));
+        timer->restart();
 
         // CELL ALIGNMENT
         AlignTableCell(ui->tableWidget->rowCount()-1);
@@ -149,6 +78,33 @@ AddScriptToTable(const int index, const QString script) {
         return;
 }
 
+void
+MainWindow::
+StepRun() {
+
+    if (m_row == invalidRow && ui->tableWidget->rowCount() > 0)
+        m_row = 0;
+
+    if (ui->tableWidget->rowCount() == 0)
+        QMessageBox::warning(this, "Invalid Script", "Invalid Script!", QMessageBox::Ok);
+    else {
+
+    }
+
+
+}
+
+void
+MainWindow::
+Stop() {
+
+}
+
+void
+MainWindow::
+Run() {
+
+}
 void
 MainWindow::
 on_b2_toggled(bool checked)
@@ -376,7 +332,6 @@ SendGroupCommand()
                 WriteToArduino(G_OFF);
             else if (data.at(i) == "BK_OFF")
                 WriteToArduino(BK_OFF);
-
         }
     }
 
@@ -395,9 +350,19 @@ void
 MainWindow::
 ClearTable() {
 
-    ui->tableWidget->setRowCount(0);
-}
+    if (ui->tableWidget->rowCount() > 0) {
 
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Warning", "Are you sure you want to reset script table?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            ui->tableWidget->setRowCount(0);
+            timer->restart();
+        }
+        else
+            return;
+    }
+    else
+        return;
+}
 
 void
 MainWindow::
@@ -422,14 +387,127 @@ ShowContextMenu(const QPoint& pos) {
 
 void
 MainWindow::
+AlignTableCell(int row) {
+
+    ui->tableWidget->item(row,0)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->tableWidget->item(row,1)->setTextAlignment(Qt::AlignCenter);
+    ui->tableWidget->item(row,2)->setTextAlignment(Qt::AlignCenter);
+    ui->tableWidget->item(row,3)->setTextAlignment(Qt::AlignVCenter);
+}
+
+void
+MainWindow::
+InitializeMainWindowScrollBar() {
+
+    QScrollArea* scrollArea = new QScrollArea();
+    scrollArea->setWidget(ui->scrollableRegion);
+    setCentralWidget(scrollArea);
+}
+
+void
+MainWindow::
+InitializeArduinoSerialPort() {
+
+    arduiono_is_available = false;
+    arduino_port_name = "";
+    arduino = new QSerialPort;
+
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+
+            if (serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
+                if (serialPortInfo.vendorIdentifier() == arduino_uno_vendor_id) {
+                    if (serialPortInfo.productIdentifier() == arduino_uno_product_id) {
+                        arduino_port_name = serialPortInfo.portName();
+                        arduiono_is_available = true;
+                    }
+                }
+            }
+    }
+
+    if (arduiono_is_available) {
+        // open configure the port
+        arduino->setPortName(arduino_port_name);
+        arduino->open(QSerialPort::WriteOnly);
+        arduino->setBaudRate(QSerialPort::Baud9600);
+        arduino->setDataBits(QSerialPort::Data8);
+        arduino->setParity(QSerialPort::NoParity);
+        arduino->setStopBits(QSerialPort::OneAndHalfStop); // on windows
+        arduino->setFlowControl(QSerialPort::NoFlowControl);
+        ui->statusBar->showMessage("Arduino bridge connected.");
+        ui->actionConnect->setEnabled(false);
+        ui->tabWidget->setEnabled(true);
+        ui->b10->setChecked(true);
+        ui->tableWidget->setItem(0,2,new QTableWidgetItem("0"));
+        timer->start();
+        AlignTableCell(ui->tableWidget->rowCount()-1);
+        EnableToolbar(true);
+
+    } else {
+        // error message
+        QMessageBox::warning(this,"error","Couldn't connect to Arduino bridge.");
+    }
+}
+
+
+void
+MainWindow::
+InitializeToolbar() {
+
+    ui->mainToolBar->addAction(ui->actionConnect);
+    ui->mainToolBar->addAction(ui->actionOpen);
+    ui->mainToolBar->addAction(ui->actionSave);
+
+    ui->mainToolBar->addSeparator();
+
+    ui->mainToolBar->addAction(ui->actionStep_Run);
+    ui->mainToolBar->addAction(ui->actionPause);
+    ui->mainToolBar->addAction(ui->actionPlay);
+    ui->mainToolBar->addSeparator();
+
+    ui->mainToolBar->addAction(ui->actionReset_Script_Table);
+    ui->mainToolBar->addAction(ui->actionTimer_Reset);
+}
+
+void
+MainWindow::
+InitializeUi() {
+
+    EnableToolbar(false);
+
+    QHeaderView *header = ui->tableWidget->horizontalHeader();
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
+    header->setResizeContentsPrecision(QHeaderView::Stretch);
+
+    connect(ui->actionStep_Run, SIGNAL(triggered(bool)), this, SLOT(StepRun()));
+    connect(ui->actionPause, SIGNAL(triggered(bool)), this, SLOT(Stop()));
+    connect(ui->actionPlay, SIGNAL(triggered(bool)), this, SLOT(Run()));
+    connect(ui->actionConnect, SIGNAL(triggered(bool)), this, SLOT(InitializeArduinoSerialPort()));
+    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(SendGroupCommand()));
+    connect(ui->actionReset_Script_Table, SIGNAL(triggered(bool)), this, SLOT(ClearTable()));
+    connect(ui->tableWidget, SIGNAL(cellPressed(int,int)), this, SLOT(SetRowCol(int,int)));
+    connect(ui->actionTimer_Reset, SIGNAL(triggered(bool)), this, SLOT(ResetTimer()));
+    connect(ui->actionSave, SIGNAL(triggered(bool)), this, SLOT(SaveScript()));
+    connect(ui->actionOpen, SIGNAL(triggered(bool)), this, SLOT(LoadScript()));
+    connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(Exit()));
+
+    //////////// RIGHT MOUSE BUTTON MENU /////////////////////////////
+    ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint &)),this, SLOT(ShowContextMenu(const QPoint &)));
+    //////////////////////////////////////////////////////////////////
+}
+
+void
+MainWindow::
 InsertScript() {
 
-    if (m_row != invalidRow) {
-        ui->tableWidget->insertRow(m_row);
-        for (int i = 0; i < ui->tableWidget->columnCount(); i++)
-            ui->tableWidget->setItem(m_row,i,new QTableWidgetItem(""));
-    }
-    m_row = invalidRow;
+    if (ui->tableWidget->rowCount() == 0)
+        m_row = 0;
+
+    ui->tableWidget->insertRow(m_row);
+    for (int i = 0; i < ui->tableWidget->columnCount(); i++)
+        ui->tableWidget->setItem(m_row,i,new QTableWidgetItem(""));
+
+    m_row = invalidRow; // INVALID UNTIL NEXT VALID MOUSE CLICK
 }
 
 void
@@ -439,4 +517,74 @@ DeleteScript() {
     if (m_row != invalidRow)
         ui->tableWidget->removeRow(m_row);
     m_row = invalidRow;
+}
+
+void
+MainWindow::
+ResetTimer() {
+    timer->restart();
+}
+
+
+void
+MainWindow::
+SaveScript() {
+
+    QString name = QDateTime::currentDateTime().toString().replace(" ","_").replace(":","").trimmed();
+    QString file = QFileDialog::getSaveFileName(this,tr("Save File"),name,tr("Test File (*.r2)"));
+    if (!file.isEmpty()) {
+        CREADWRITEFILE *cReadWriteFile = new CREADWRITEFILE;
+        cReadWriteFile->SaveFile(ui->tableWidget, file);
+        delete cReadWriteFile;
+    }
+    else
+        return;
+}
+
+void
+MainWindow::
+LoadScript() {
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Load Test", "Current scripts will be completely deleted. \nAre you sure you want to continue?",QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+
+        QString file = QFileDialog::getOpenFileName(this,tr("Open test file"), QDir::currentPath(), tr("Test File (*.r2)"));
+        if (!file.isEmpty()) {
+
+            CREADWRITEFILE *cReadWriteFile = new CREADWRITEFILE;
+            cReadWriteFile->LoadFile(ui->tableWidget, file);
+            delete cReadWriteFile;
+        }
+        else
+            return;
+    }
+    else
+        return;
+}
+
+void
+MainWindow::
+Exit() {
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Exit", "Are you sure you want to exit?",
+                                                               QMessageBox::Yes|QMessageBox::No);
+       if (reply == QMessageBox::Yes) {
+           QApplication::quit();
+         }
+       else
+           return;
+}
+
+
+void
+MainWindow::
+EnableToolbar(const bool control) {
+
+    ui->actionOpen->setEnabled(control);
+    ui->actionSave->setEnabled(control);
+    ui->actionReset_Script_Table->setEnabled(control);
+    ui->actionTimer_Reset->setEnabled(control);
+    ui->actionPlay->setEnabled(control);
+    ui->actionStep_Run->setEnabled(control);
+    ui->actionPause->setEnabled(control);
 }

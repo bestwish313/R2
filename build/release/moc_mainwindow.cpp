@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[20];
-    char stringdata0[267];
+    QByteArrayData data[28];
+    char stringdata0[350];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,15 @@ QT_MOC_LITERAL(15, 204, 10), // "ClearTable"
 QT_MOC_LITERAL(16, 215, 9), // "SetRowCol"
 QT_MOC_LITERAL(17, 225, 15), // "ShowContextMenu"
 QT_MOC_LITERAL(18, 241, 12), // "InsertScript"
-QT_MOC_LITERAL(19, 254, 12) // "DeleteScript"
+QT_MOC_LITERAL(19, 254, 12), // "DeleteScript"
+QT_MOC_LITERAL(20, 267, 27), // "InitializeArduinoSerialPort"
+QT_MOC_LITERAL(21, 295, 10), // "ResetTimer"
+QT_MOC_LITERAL(22, 306, 10), // "SaveScript"
+QT_MOC_LITERAL(23, 317, 10), // "LoadScript"
+QT_MOC_LITERAL(24, 328, 4), // "Exit"
+QT_MOC_LITERAL(25, 333, 3), // "Run"
+QT_MOC_LITERAL(26, 337, 7), // "StepRun"
+QT_MOC_LITERAL(27, 345, 4) // "Stop"
 
     },
     "MainWindow\0on_b2_toggled\0\0checked\0"
@@ -57,7 +65,10 @@ QT_MOC_LITERAL(19, 254, 12) // "DeleteScript"
     "on_b9_toggled\0on_b10_toggled\0"
     "AddScriptToTable\0on_radioButton_toggled\0"
     "SendGroupCommand\0ClearTable\0SetRowCol\0"
-    "ShowContextMenu\0InsertScript\0DeleteScript"
+    "ShowContextMenu\0InsertScript\0DeleteScript\0"
+    "InitializeArduinoSerialPort\0ResetTimer\0"
+    "SaveScript\0LoadScript\0Exit\0Run\0StepRun\0"
+    "Stop"
 };
 #undef QT_MOC_LITERAL
 
@@ -67,7 +78,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      25,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -75,23 +86,31 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   99,    2, 0x08 /* Private */,
-       4,    1,  102,    2, 0x08 /* Private */,
-       5,    1,  105,    2, 0x08 /* Private */,
-       6,    1,  108,    2, 0x08 /* Private */,
-       7,    1,  111,    2, 0x08 /* Private */,
-       8,    1,  114,    2, 0x08 /* Private */,
-       9,    1,  117,    2, 0x08 /* Private */,
-      10,    1,  120,    2, 0x08 /* Private */,
-      11,    1,  123,    2, 0x08 /* Private */,
-      12,    2,  126,    2, 0x08 /* Private */,
-      13,    1,  131,    2, 0x08 /* Private */,
-      14,    0,  134,    2, 0x08 /* Private */,
-      15,    0,  135,    2, 0x08 /* Private */,
-      16,    2,  136,    2, 0x08 /* Private */,
-      17,    1,  141,    2, 0x08 /* Private */,
-      18,    0,  144,    2, 0x08 /* Private */,
-      19,    0,  145,    2, 0x08 /* Private */,
+       1,    1,  139,    2, 0x08 /* Private */,
+       4,    1,  142,    2, 0x08 /* Private */,
+       5,    1,  145,    2, 0x08 /* Private */,
+       6,    1,  148,    2, 0x08 /* Private */,
+       7,    1,  151,    2, 0x08 /* Private */,
+       8,    1,  154,    2, 0x08 /* Private */,
+       9,    1,  157,    2, 0x08 /* Private */,
+      10,    1,  160,    2, 0x08 /* Private */,
+      11,    1,  163,    2, 0x08 /* Private */,
+      12,    2,  166,    2, 0x08 /* Private */,
+      13,    1,  171,    2, 0x08 /* Private */,
+      14,    0,  174,    2, 0x08 /* Private */,
+      15,    0,  175,    2, 0x08 /* Private */,
+      16,    2,  176,    2, 0x08 /* Private */,
+      17,    1,  181,    2, 0x08 /* Private */,
+      18,    0,  184,    2, 0x08 /* Private */,
+      19,    0,  185,    2, 0x08 /* Private */,
+      20,    0,  186,    2, 0x08 /* Private */,
+      21,    0,  187,    2, 0x08 /* Private */,
+      22,    0,  188,    2, 0x08 /* Private */,
+      23,    0,  189,    2, 0x08 /* Private */,
+      24,    0,  190,    2, 0x08 /* Private */,
+      25,    0,  191,    2, 0x08 /* Private */,
+      26,    0,  192,    2, 0x08 /* Private */,
+      27,    0,  193,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -109,6 +128,14 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -138,6 +165,14 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 14: _t->ShowContextMenu((*reinterpret_cast< const QPoint(*)>(_a[1]))); break;
         case 15: _t->InsertScript(); break;
         case 16: _t->DeleteScript(); break;
+        case 17: _t->InitializeArduinoSerialPort(); break;
+        case 18: _t->ResetTimer(); break;
+        case 19: _t->SaveScript(); break;
+        case 20: _t->LoadScript(); break;
+        case 21: _t->Exit(); break;
+        case 22: _t->Run(); break;
+        case 23: _t->StepRun(); break;
+        case 24: _t->Stop(); break;
         default: ;
         }
     }
@@ -168,13 +203,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 25;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 25)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 17;
+        _id -= 25;
     }
     return _id;
 }

@@ -5,5 +5,10 @@
         <file>images/splash.png</file>
         <file>images/new.png</file>
         <file>images/clean.png</file>
+        <file>images/connect.png</file>
+        <file>images/timer_reset.png</file>
+        <file>images/play.png</file>
+        <file>images/pause.png</file>
+        <file>images/step.png</file>
     </qresource>
 </RCC>

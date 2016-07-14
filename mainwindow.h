@@ -5,6 +5,9 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QMessageBox>
+#include <QElapsedTimer>
+#include <QTableWidget>
+#include <QFile>
 
 
 namespace Ui {
@@ -20,11 +23,11 @@ public:
     ~MainWindow();
 
     void InitializeMainWindowScrollBar();
-    void InitializeToolbar();
-    void InitializeArduinoSerialPort();
+    void InitializeToolbar();    
     void InitializeUi();
     void WriteToArduino(const QString);
     void AlignTableCell(const int);
+    void EnableToolbar(const bool);
 
 
 private slots:
@@ -46,6 +49,15 @@ private slots:
     void ShowContextMenu(const QPoint&);
     void InsertScript();
     void DeleteScript();
+    void InitializeArduinoSerialPort();
+    void ResetTimer();
+    void SaveScript();
+    void LoadScript();
+    void Exit();
+    void Run();
+    void StepRun();
+    void Stop();
+
 
 private:
     Ui::MainWindow *ui;
@@ -60,6 +72,7 @@ private:
     int m_delay;
     int m_row;
     int m_col;
+    QElapsedTimer *timer;
 
     bool Power;
     const QString W1 = "2"; const QString W1_OFF = "A";

@@ -38,6 +38,15 @@
        <height>191</height>
       </rect>
      </property>
+     <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::DragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::MoveAction</enum>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -68,7 +77,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Wait (msec)</string>
+       <string>Delay (sec)</string>
       </property>
      </column>
      <column>
@@ -88,6 +97,9 @@
      </column>
     </widget>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -112,18 +124,18 @@
        <property name="geometry">
         <rect>
          <x>310</x>
-         <y>10</y>
+         <y>5</y>
          <width>251</width>
          <height>123</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="title">
-        <string>24V CONTROL BOX</string>
+        <string>CONTROL</string>
        </property>
        <property name="flat">
         <bool>false</bool>
@@ -135,7 +147,7 @@
         <property name="geometry">
          <rect>
           <x>30</x>
-          <y>26</y>
+          <y>24</y>
           <width>51</width>
           <height>17</height>
          </rect>
@@ -144,6 +156,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auxiliary Heat (Electric Heat) - Stage 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>W1</string>
@@ -156,7 +171,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>26</y>
+          <y>24</y>
           <width>41</width>
           <height>17</height>
          </rect>
@@ -165,6 +180,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auxiliary Heat (Electric Heat) - Stage 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>W2</string>
@@ -177,7 +195,7 @@
         <property name="geometry">
          <rect>
           <x>184</x>
-          <y>26</y>
+          <y>24</y>
           <width>41</width>
           <height>17</height>
          </rect>
@@ -186,6 +204,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auxiliary Heat (Electric Heat) - Stage 3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>W3</string>
@@ -198,7 +219,7 @@
         <property name="geometry">
          <rect>
           <x>30</x>
-          <y>59</y>
+          <y>57</y>
           <width>41</width>
           <height>17</height>
          </rect>
@@ -207,6 +228,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stage 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Y1</string>
@@ -219,7 +243,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>59</y>
+          <y>57</y>
           <width>51</width>
           <height>17</height>
          </rect>
@@ -228,6 +252,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stage 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Y2</string>
@@ -240,7 +267,7 @@
         <property name="geometry">
          <rect>
           <x>184</x>
-          <y>59</y>
+          <y>57</y>
           <width>41</width>
           <height>17</height>
          </rect>
@@ -249,6 +276,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Compressor Cooling or Compressor Heating&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>O</string>
@@ -261,7 +291,7 @@
         <property name="geometry">
          <rect>
           <x>30</x>
-          <y>92</y>
+          <y>90</y>
           <width>41</width>
           <height>17</height>
          </rect>
@@ -270,6 +300,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Blower&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>G</string>
@@ -282,7 +315,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>92</y>
+          <y>90</y>
           <width>51</width>
           <height>17</height>
          </rect>
@@ -291,6 +324,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dehumid when button is OFF&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>BK</string>
@@ -303,129 +339,16 @@
         <property name="geometry">
          <rect>
           <x>184</x>
-          <y>92</y>
+          <y>90</y>
           <width>51</width>
           <height>17</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Power Source&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>R</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="geometry">
-        <rect>
-         <x>580</x>
-         <y>10</y>
-         <width>311</width>
-         <height>58</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>VERIFY</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <widget class="QTextEdit" name="textEdit">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>20</y>
-          <width>281</width>
-          <height>26</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="geometry">
-        <rect>
-         <x>580</x>
-         <y>76</y>
-         <width>311</width>
-         <height>45</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>RESULT</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <widget class="QRadioButton" name="radioButton_3">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>19</y>
-          <width>51</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>PASS</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="radioButton_4">
-        <property name="geometry">
-         <rect>
-          <x>130</x>
-          <y>19</y>
-          <width>51</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>FAIL</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="radioButton_5">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>19</y>
-          <width>71</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>INVALID</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="geometry">
-        <rect>
-         <x>580</x>
-         <y>130</y>
-         <width>311</width>
-         <height>58</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>COMMENT</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-       <widget class="QTextEdit" name="textEdit_2">
-        <property name="geometry">
-         <rect>
-          <x>17</x>
-          <y>20</y>
-          <width>281</width>
-          <height>26</height>
-         </rect>
         </property>
        </widget>
       </widget>
@@ -433,13 +356,18 @@
        <property name="geometry">
         <rect>
          <x>310</x>
-         <y>140</y>
+         <y>134</y>
          <width>251</width>
-         <height>51</height>
+         <height>57</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="title">
-        <string>COMMAND MODE</string>
+        <string>CONTROL MODE</string>
        </property>
        <widget class="QRadioButton" name="radioButton_2">
         <property name="geometry">
@@ -450,8 +378,11 @@
           <height>16</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Single Command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string>Normal</string>
+         <string>Single</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -482,112 +413,130 @@
           <height>16</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Grouped Command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Group</string>
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_8">
+      <widget class="QTreeWidget" name="treeWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
+         <y>12</y>
          <width>281</width>
-         <height>71</height>
+         <height>179</height>
         </rect>
        </property>
-       <property name="title">
-        <string>TIMER (msec)</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <widget class="QLCDNumber" name="lcdNumber">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>20</y>
-          <width>261</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="digitCount">
-         <number>14</number>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>SETUP</string>
-      </attribute>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>10</y>
-         <width>431</width>
-         <height>181</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>TEST DIRECTORY</string>
-       </property>
-       <widget class="QTreeWidget" name="treeWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>20</y>
-          <width>411</width>
-          <height>151</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Directory</string>
-         </property>
-        </column>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_6">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>231</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>RUN MODOE</string>
-       </property>
-       <widget class="QRadioButton" name="radioButton_6">
-        <property name="geometry">
-         <rect>
-          <x>26</x>
-          <y>23</y>
-          <width>101</width>
-          <height>17</height>
-         </rect>
-        </property>
+       <column>
         <property name="text">
-         <string>SINGLESHOT</string>
+         <string>TEST DIRECTORY</string>
         </property>
-        <property name="checked">
+       </column>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>4</y>
+         <width>311</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>VERIFY</string>
+       </property>
+       <widget class="QTextEdit" name="textEdit">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>291</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QRadioButton" name="radioButton_7">
+      </widget>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>68</y>
+         <width>311</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>COMMENT</string>
+       </property>
+       <widget class="QTextEdit" name="textEdit_2">
         <property name="geometry">
          <rect>
-          <x>151</x>
-          <y>23</y>
+          <x>10</x>
+          <y>20</y>
+          <width>291</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="geometry">
+        <rect>
+         <x>580</x>
+         <y>133</y>
+         <width>311</width>
+         <height>59</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>RESULT</string>
+       </property>
+       <widget class="QRadioButton" name="radioButton_3">
+        <property name="geometry">
+         <rect>
+          <x>33</x>
+          <y>25</y>
           <width>61</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>LOOP</string>
+         <string>PASS</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_4">
+        <property name="geometry">
+         <rect>
+          <x>113</x>
+          <y>25</y>
+          <width>51</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>FAIL</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_5">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>25</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>INCOMPLETE</string>
         </property>
        </widget>
       </widget>
@@ -595,6 +544,15 @@
     </widget>
    </widget>
   </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -608,60 +566,48 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
      <string>Control</string>
     </property>
+    <addaction name="actionConnect"/>
     <addaction name="actionPlay"/>
     <addaction name="actionPause"/>
-   </widget>
-   <widget class="QMenu" name="menuRecord">
-    <property name="title">
-     <string>Record</string>
-    </property>
-    <addaction name="actionRecord"/>
-    <addaction name="actionStop"/>
     <addaction name="separator"/>
-    <addaction name="actionReset_Script"/>
+    <addaction name="actionTimer_Reset"/>
+    <addaction name="actionReset_Script_Table"/>
+    <addaction name="actionStep_Run"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
-   <addaction name="menuRecord"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionRecord">
-   <property name="text">
-    <string>Record</string>
-   </property>
-  </action>
-  <action name="actionStop">
-   <property name="text">
-    <string>Stop</string>
-   </property>
-  </action>
   <action name="actionPlay">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+   </property>
    <property name="text">
-    <string>Play</string>
+    <string>Run</string>
    </property>
   </action>
   <action name="actionPause">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/pause.png</normaloff>:/images/pause.png</iconset>
+   </property>
    <property name="text">
     <string>Pause</string>
    </property>
   </action>
   <action name="actionOpen">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
@@ -674,6 +620,9 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
@@ -682,22 +631,54 @@
     <string>Save</string>
    </property>
   </action>
-  <action name="actionNew">
+  <action name="actionConnect">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
+     <normaloff>:/images/connect.png</normaloff>:/images/connect.png</iconset>
    </property>
    <property name="text">
-    <string>New</string>
+    <string>Connect</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionReset_Script">
+  <action name="actionTimer_Reset">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/timer_reset.png</normaloff>:/images/timer_reset.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset Timer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionReset_Script_Table">
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/images/clean.png</normaloff>:/images/clean.png</iconset>
    </property>
    <property name="text">
-    <string>Reset Script</string>
+    <string>Reset Script Table</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionStep_Run">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/step.png</normaloff>:/images/step.png</iconset>
+   </property>
+   <property name="text">
+    <string>Step Run</string>
    </property>
   </action>
  </widget>
