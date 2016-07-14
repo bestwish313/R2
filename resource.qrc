@@ -10,5 +10,6 @@
         <file>images/play.png</file>
         <file>images/pause.png</file>
         <file>images/step.png</file>
+        <file>images/disconnect.png</file>
     </qresource>
 </RCC>

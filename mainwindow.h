@@ -25,6 +25,7 @@ public:
     void InitializeMainWindowScrollBar();
     void InitializeToolbar();    
     void InitializeUi();
+    void InitializeViewer();
     void WriteToArduino(const QString);
     void AlignTableCell(const int);
     void EnableToolbar(const bool);
@@ -49,7 +50,7 @@ private slots:
     void ShowContextMenu(const QPoint&);
     void InsertScript();
     void DeleteScript();
-    void InitializeArduinoSerialPort();
+    void managePortConnection();
     void ResetTimer();
     void SaveScript();
     void LoadScript();
@@ -57,17 +58,24 @@ private slots:
     void Run();
     void StepRun();
     void Stop();
+    void readSpiderData();
 
 
 private:
     Ui::MainWindow *ui;
 
     QSerialPort *arduino;
+    QSerialPort *spider;
     QString m_script;
     QString arduino_port_name;
+    QString spider_port_name;
+    bool connected;
     bool arduiono_is_available;
+    bool spider_is_available;
     static const quint16 arduino_uno_vendor_id = 9025;
     static const quint16 arduino_uno_product_id = 67;
+    static const quint16 spider_vendor_id = 1027;
+    static const quint16 spider_product_id = 24577;
     static const int invalidRow =  9999999999;
     int m_delay;
     int m_row;

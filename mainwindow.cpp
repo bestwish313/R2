@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_delay(0),
     m_row(invalidRow),
     m_col(0),
+    connected(false),
     timer(new QElapsedTimer)
 {
     ui->setupUi(this);
@@ -90,8 +91,6 @@ StepRun() {
     else {
 
     }
-
-
 }
 
 void
@@ -404,50 +403,6 @@ InitializeMainWindowScrollBar() {
     setCentralWidget(scrollArea);
 }
 
-void
-MainWindow::
-InitializeArduinoSerialPort() {
-
-    arduiono_is_available = false;
-    arduino_port_name = "";
-    arduino = new QSerialPort;
-
-    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
-
-            if (serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
-                if (serialPortInfo.vendorIdentifier() == arduino_uno_vendor_id) {
-                    if (serialPortInfo.productIdentifier() == arduino_uno_product_id) {
-                        arduino_port_name = serialPortInfo.portName();
-                        arduiono_is_available = true;
-                    }
-                }
-            }
-    }
-
-    if (arduiono_is_available) {
-        // open configure the port
-        arduino->setPortName(arduino_port_name);
-        arduino->open(QSerialPort::WriteOnly);
-        arduino->setBaudRate(QSerialPort::Baud9600);
-        arduino->setDataBits(QSerialPort::Data8);
-        arduino->setParity(QSerialPort::NoParity);
-        arduino->setStopBits(QSerialPort::OneAndHalfStop); // on windows
-        arduino->setFlowControl(QSerialPort::NoFlowControl);
-        ui->statusBar->showMessage("Arduino bridge connected.");
-        ui->actionConnect->setEnabled(false);
-        ui->tabWidget->setEnabled(true);
-        ui->b10->setChecked(true);
-        ui->tableWidget->setItem(0,2,new QTableWidgetItem("0"));
-        timer->start();
-        AlignTableCell(ui->tableWidget->rowCount()-1);
-        EnableToolbar(true);
-
-    } else {
-        // error message
-        QMessageBox::warning(this,"error","Couldn't connect to Arduino bridge.");
-    }
-}
-
 
 void
 MainWindow::
@@ -481,7 +436,7 @@ InitializeUi() {
     connect(ui->actionStep_Run, SIGNAL(triggered(bool)), this, SLOT(StepRun()));
     connect(ui->actionPause, SIGNAL(triggered(bool)), this, SLOT(Stop()));
     connect(ui->actionPlay, SIGNAL(triggered(bool)), this, SLOT(Run()));
-    connect(ui->actionConnect, SIGNAL(triggered(bool)), this, SLOT(InitializeArduinoSerialPort()));
+    connect(ui->actionConnect, SIGNAL(triggered(bool)), this, SLOT(managePortConnection()));
     connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(SendGroupCommand()));
     connect(ui->actionReset_Script_Table, SIGNAL(triggered(bool)), this, SLOT(ClearTable()));
     connect(ui->tableWidget, SIGNAL(cellPressed(int,int)), this, SLOT(SetRowCol(int,int)));
@@ -587,4 +542,111 @@ EnableToolbar(const bool control) {
     ui->actionPlay->setEnabled(control);
     ui->actionStep_Run->setEnabled(control);
     ui->actionPause->setEnabled(control);
+}
+
+
+void
+MainWindow::
+managePortConnection() {
+
+    if (connected) {
+        ui->actionConnect->setIcon(QIcon(":/images/disconnect.png"));
+        arduino->close();
+        spider->close();
+        ui->statusBar->showMessage("System disconnected.");
+        connected = false;
+        ui->tabWidget->setEnabled(false);
+    }
+    else {
+        ui->tabWidget->setEnabled(true);
+        arduiono_is_available = false;
+        arduino_port_name = "";
+        arduino = new QSerialPort;
+
+        foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+
+                if (serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
+                    if (serialPortInfo.vendorIdentifier() == arduino_uno_vendor_id) {
+                        if (serialPortInfo.productIdentifier() == arduino_uno_product_id) {
+                            arduino_port_name = serialPortInfo.portName();
+                            arduiono_is_available = true;
+                        }
+                    }
+                }
+        }
+
+        if (arduiono_is_available) {
+            // open configure the port
+            arduino->setPortName(arduino_port_name);
+            arduino->open(QSerialPort::WriteOnly);
+            arduino->setBaudRate(QSerialPort::Baud9600);
+            arduino->setDataBits(QSerialPort::Data8);
+            arduino->setParity(QSerialPort::NoParity);
+            arduino->setStopBits(QSerialPort::OneAndHalfStop); // on windows
+            arduino->setFlowControl(QSerialPort::NoFlowControl);
+            ui->statusBar->showMessage("Arduino bridge connected.");
+            //ui->actionConnect->setEnabled(false);
+            ui->actionConnect->setIcon(QIcon(":/images/connect.png"));
+            connected = true;
+            ui->tabWidget->setEnabled(true);
+            ui->b10->setChecked(true);
+            ui->tableWidget->setItem(0,2,new QTableWidgetItem("0"));
+            timer->start();
+            AlignTableCell(ui->tableWidget->rowCount()-1);
+            EnableToolbar(true);
+
+            // READ TARGET BOARD
+            InitializeViewer();
+
+        } else {
+            // error message
+            QMessageBox::warning(this,"error","Couldn't connect to Arduino bridge.");
+        }
+    }
+}
+
+
+
+void
+MainWindow::
+InitializeViewer() {
+    spider_is_available = false;
+    spider_port_name = "";
+    spider = new QSerialPort;
+
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+            if (serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
+                if (serialPortInfo.vendorIdentifier() == spider_vendor_id) {
+                    if (serialPortInfo.productIdentifier() == spider_product_id) {
+                        spider_port_name = serialPortInfo.portName();
+                        spider_is_available = true;
+                    }
+                }
+            }
+    }
+
+    if (spider_is_available) {
+        // open configure the port
+        spider->setPortName(spider_port_name);
+        spider->open(QSerialPort::ReadOnly);
+        spider->setBaudRate(QSerialPort::Baud115200);
+        spider->setDataBits(QSerialPort::Data8);
+        spider->setParity(QSerialPort::NoParity);
+        spider->setStopBits(QSerialPort::OneAndHalfStop); // on windows
+        spider->setFlowControl(QSerialPort::NoFlowControl);
+        ui->statusBar->showMessage("System connected.");
+        ui->tabWidget_2->setEnabled(true);
+        connect(spider, SIGNAL(readyRead()), this, SLOT(readSpiderData()));
+
+    } else {
+        // error message
+        QMessageBox::warning(this,"error","Couldn't connect to Spider bridge.");
+    }
+}
+
+void
+MainWindow::
+readSpiderData() {
+    QByteArray data = spider->readAll();
+    ui->textEdit_3->append(data.data());
 }
