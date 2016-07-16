@@ -42,7 +42,7 @@ private slots:
     void on_b8_toggled(bool checked);
     void on_b9_toggled(bool checked);
     void on_b10_toggled(bool checked);
-    void AddScriptToTable(const int, const QString);
+    void AddCommandToTable(const int, const QString);
     void on_radioButton_toggled(bool checked);
     void SendGroupCommand();
     void ClearTable();

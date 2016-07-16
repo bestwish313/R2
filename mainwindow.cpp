@@ -42,7 +42,7 @@ WriteToArduino(const QString value) {
 
 void
 MainWindow::
-AddScriptToTable(const int index, const QString script) {
+AddCommandToTable(const int index, const QString script) {
 
     if (ui->radioButton->isChecked()) {
         m_script.append(script).append(",");
@@ -111,12 +111,12 @@ on_b2_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W1);
-        AddScriptToTable(1,"W1");
+        AddCommandToTable(1,"W1");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W1_OFF);
-        AddScriptToTable(1,"W1_OFF");
+        AddCommandToTable(1,"W1_OFF");
     }
 }
 
@@ -127,12 +127,12 @@ on_b3_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W2);
-        AddScriptToTable(1,"W2");
+        AddCommandToTable(1,"W2");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W2_OFF);
-        AddScriptToTable(1,"W2_OFF");
+        AddCommandToTable(1,"W2_OFF");
     }
 }
 
@@ -143,12 +143,12 @@ on_b4_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W3);
-        AddScriptToTable(1,"W3");
+        AddCommandToTable(1,"W3");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(W3_OFF);
-        AddScriptToTable(1,"W3_OFF");
+        AddCommandToTable(1,"W3_OFF");
     }
 }
 
@@ -159,12 +159,12 @@ on_b5_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(Y1);
-        AddScriptToTable(1,"Y1");
+        AddCommandToTable(1,"Y1");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(Y1_OFF);
-        AddScriptToTable(1,"Y1_OFF");
+        AddCommandToTable(1,"Y1_OFF");
     }
 }
 
@@ -175,12 +175,12 @@ on_b6_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(Y2);
-        AddScriptToTable(1,"Y2");
+        AddCommandToTable(1,"Y2");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(Y2_OFF);
-        AddScriptToTable(1,"Y2_OFF");
+        AddCommandToTable(1,"Y2_OFF");
     }
 }
 
@@ -191,12 +191,12 @@ on_b7_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(O);
-        AddScriptToTable(1,"O");
+        AddCommandToTable(1,"O");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(O_OFF);
-        AddScriptToTable(1,"O_OFF");
+        AddCommandToTable(1,"O_OFF");
     }
 }
 
@@ -207,12 +207,12 @@ on_b8_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(G);
-        AddScriptToTable(1,"G");
+        AddCommandToTable(1,"G");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(G_OFF);
-        AddScriptToTable(1,"G_OFF");
+        AddCommandToTable(1,"G_OFF");
     }
 }
 
@@ -223,12 +223,12 @@ on_b9_toggled(bool checked)
     if (checked) {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(BK);
-        AddScriptToTable(1,"BK");
+        AddCommandToTable(1,"BK");
     }
     else {
         if (Power && ui->radioButton_2->isChecked())
             WriteToArduino(BK_OFF);
-        AddScriptToTable(1,"BK_OFF");
+        AddCommandToTable(1,"BK_OFF");
     }
 }
 
@@ -238,7 +238,7 @@ on_b10_toggled(bool checked)
 {
     if (checked) {
         WriteToArduino(R);
-        AddScriptToTable(1,"R");
+        AddCommandToTable(1,"R");
         Power = true;
 
         if (ui->b2->isChecked())
@@ -267,7 +267,7 @@ on_b10_toggled(bool checked)
     }
     else {
         WriteToArduino(R_OFF);
-        AddScriptToTable(1,"R_OFF");
+        AddCommandToTable(1,"R_OFF");
         WriteToArduino(CLEAR);
         Power = false;
     }
@@ -294,7 +294,7 @@ SendGroupCommand()
     // SEND GROUP COMMAND
     if (!m_script.isEmpty()) {
         m_script = m_script.left(m_script.length() -1);
-        AddScriptToTable(1,m_script);
+        AddCommandToTable(1,m_script);
         QStringList data = m_script.split(",");
 
         for (int i = 0; i < data.length(); i++) {
@@ -486,7 +486,7 @@ MainWindow::
 SaveScript() {
 
     QString name = QDateTime::currentDateTime().toString().replace(" ","_").replace(":","").trimmed();
-    QString file = QFileDialog::getSaveFileName(this,tr("Save File"),name,tr("Test File (*.r2)"));
+    QString file = QFileDialog::getSaveFileName(this,tr("Save File"),name,tr("json script file (*.json)"));
     if (!file.isEmpty()) {
         CREADWRITEFILE *cReadWriteFile = new CREADWRITEFILE;
         cReadWriteFile->SaveFile(ui->tableWidget, file);
@@ -551,6 +551,7 @@ managePortConnection() {
 
     if (connected) {
         ui->actionConnect->setIcon(QIcon(":/images/disconnect.png"));
+        ui->actionConnect->setToolTip("Disconnected");
         arduino->close();
         spider->close();
         ui->statusBar->showMessage("System disconnected.");
@@ -587,6 +588,7 @@ managePortConnection() {
             ui->statusBar->showMessage("Arduino bridge connected.");
             //ui->actionConnect->setEnabled(false);
             ui->actionConnect->setIcon(QIcon(":/images/connect.png"));
+            ui->actionConnect->setToolTip("Connected");
             connected = true;
             ui->tabWidget->setEnabled(true);
             ui->b10->setChecked(true);

@@ -12,6 +12,7 @@ public:
 
     void SaveFile(QTableWidget *, const QString);
     void LoadFile(QTableWidget *, const QString);
+    void writeJsonFile(QTableWidget *);
 };
 
 #endif // CREADWRITEFILE_H

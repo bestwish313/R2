@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 CREADWRITEFILE::CREADWRITEFILE()
 {
@@ -18,15 +21,19 @@ SaveFile(QTableWidget *table, const QString filename) {
     if (!file.open(QIODevice::WriteOnly))
         return;
     else {
+        QJsonObject json;
+        QJsonArray jsonArray;
         QTextStream out (&file);
-        QString line; // LINE CONTAINER
         for (int i = 0; i < table->rowCount(); i++) {
+
+            QJsonArray jsonArray2;
             for (int j = 0; j < table->columnCount(); j++)
-                line.append(table->item(i,j)->text().trimmed()).append("|");
-            line = line.left(line.length()-1); // REMOVE LAST "|"
-            out << line.append("\n");
-            line.clear();
+                jsonArray2.append(table->item(i,j)->text().trimmed());
+            jsonArray.append(jsonArray2);
         }
+        json["SCRIPT"] = jsonArray;
+        QJsonDocument jdoc(json);
+        out << jdoc.toJson(QJsonDocument::Indented);
         file.close();
     }
 }
