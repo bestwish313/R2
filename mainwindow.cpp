@@ -503,7 +503,7 @@ LoadScript() {
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Load Test", "Current scripts will be completely deleted. \nAre you sure you want to continue?",QMessageBox::Yes|QMessageBox::No);
     if (reply == QMessageBox::Yes) {
 
-        QString file = QFileDialog::getOpenFileName(this,tr("Open test file"), QDir::currentPath(), tr("Test File (*.r2)"));
+        QString file = QFileDialog::getOpenFileName(this,tr("Open test file"), QDir::currentPath(), tr("json script file (*.json)"));
         if (!file.isEmpty()) {
 
             CREADWRITEFILE *cReadWriteFile = new CREADWRITEFILE;
@@ -535,8 +535,9 @@ void
 MainWindow::
 EnableToolbar(const bool control) {
 
-    ui->actionOpen->setEnabled(control);
-    ui->actionSave->setEnabled(control);
+
+    ui->actionOpen->setEnabled(true);
+    ui->actionSave->setEnabled(true);
     ui->actionReset_Script_Table->setEnabled(control);
     ui->actionTimer_Reset->setEnabled(control);
     ui->actionPlay->setEnabled(control);

@@ -44,31 +44,38 @@ CREADWRITEFILE::
 LoadFile(QTableWidget *table, const QString filename) {
 
     QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
     else {
+        // reset table
+        table->setRowCount(0);
 
-        table->setRowCount(0); // RESET TABLE
+        // read file
+        QByteArray byteArray = file.readAll();
+        file.close();
 
-        QTextStream in(&file);
-        while (!in.atEnd()) {
+        // read json document
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(byteArray);
+        QJsonObject jsonObject = jsonDocument.object();
+        QJsonArray jsonArray = jsonObject["SCRIPT"].toArray();
 
-            QString line = in.readLine();
-            QStringList item = line.split("|");
+        // row count
+        for (int i = 0; i < jsonArray.size(); i++) {
 
-            // INSERT A NEW ROW
+            // add table row
             table->insertRow(table->rowCount());
 
-            // SET ITEM AND ALIGN
-            for (int j = 0; j < item.size(); j++) {
-                table->setItem(table->rowCount()-1,j,new QTableWidgetItem (item[j]));
-                table->item(table->rowCount()-1,j)->setTextAlignment(Qt::AlignCenter);
+            // column count
+            for (int j = 0; j < jsonArray[0].toArray().size(); j++) {
+                QString value = jsonArray[i].toArray().at(j).toString();
+
+                table->setItem(i,j,new QTableWidgetItem (value));
+                table->item(i,j)->setTextAlignment(Qt::AlignCenter);
             }
         }
 
         // SELECT ROW 0 FOR TEST MODE TO START AT ROW 0 BY DEFAULT
         table->setFocus();
         table->selectRow(0);
-        file.close();
     }
 }
